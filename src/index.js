@@ -14,6 +14,8 @@ function Square(props) {
 }
 
 class Board extends React.Component {
+
+  // Render a square element of the board
   renderSquare(i) {
     return (
       <Square
@@ -23,25 +25,36 @@ class Board extends React.Component {
     );
   }
 
+  // Map an array of values into a list of rendered square elements
+  renderRow(valRow) {
+    return valRow.map((val) =>
+      this.renderSquare(val)
+    );
+  }
+
+  // Map a 2D array input to a list of rendered row elements
+  renderAllRows(vals) {
+    return vals.map((valRow) =>
+      <div className="board-row">
+        {this.renderRow(valRow)}
+      </div>
+    );
+  }
+  
   render() {
+    const num_of_cols = 3;
+    const num_of_rows = 3;
+
+    const vals = [
+      [0,1,2],
+      [3,4,5],
+      [6,7,8]
+    ];
+
     // A div element containing 9 squares in a grid
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {this.renderAllRows(vals)}
       </div>
     );
   }
