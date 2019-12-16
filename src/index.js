@@ -40,16 +40,26 @@ class Board extends React.Component {
       </div>
     );
   }
-  
-  render() {
-    const num_of_cols = 3;
-    const num_of_rows = 3;
 
-    const vals = [
+  render() {
+    const numOfCols = 3;
+    const numOfRows = 3;
+
+    /*
+    var vals = [
       [0,1,2],
       [3,4,5],
       [6,7,8]
     ];
+    */
+    var vals = [];
+    for (var i = 0; i < numOfRows; i++) {
+      var valRow = [];
+      for (var j = 0; j < numOfCols; j++) {
+        valRow.push(j + (i*numOfCols));
+      }
+      vals.push(valRow);
+    }
 
     // A div element containing 9 squares in a grid
     return (
