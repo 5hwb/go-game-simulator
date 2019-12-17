@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+// ========================================
+// SQUARE COMPONENT
+// ========================================
 function Square(props) {
   return (
     <button
@@ -13,6 +16,9 @@ function Square(props) {
   );
 }
 
+// ========================================
+// BOARD COMPONENT
+// ========================================
 class Board extends React.Component {
 
   // Render a square element of the board
@@ -25,14 +31,14 @@ class Board extends React.Component {
     );
   }
 
-  // Map an array of values into a list of rendered square elements
+  // Map an array of values into a list of square elements
   renderRow(valRow) {
     return valRow.map((val) =>
       this.renderSquare(val)
     );
   }
 
-  // Map a 2D array input to a list of rendered row elements
+  // Map a 2D array input to a list of row elements
   renderAllRows(vals) {
     return vals.map((valRow) =>
       <div className="board-row">
@@ -41,10 +47,13 @@ class Board extends React.Component {
     );
   }
 
+  // Render a Board component
   render() {
+    // Dimension of board is hardcoded for now
     const numOfCols = 3;
     const numOfRows = 3;
 
+    // Generate a 2D array with the elements arranged as shown:
     /*
     var vals = [
       [0,1,2],
@@ -52,6 +61,7 @@ class Board extends React.Component {
       [6,7,8]
     ];
     */
+    // This 2D array will be used to generate the grid
     var vals = [];
     for (var i = 0; i < numOfRows; i++) {
       var valRow = [];
@@ -61,7 +71,7 @@ class Board extends React.Component {
       vals.push(valRow);
     }
 
-    // A div element containing 9 squares in a grid
+    // Return div element containing 9 squares in a grid
     return (
       <div>
         {this.renderAllRows(vals)}
@@ -70,30 +80,42 @@ class Board extends React.Component {
   }
 }
 
+// ========================================
+// GAME COMPONENT
+// ========================================
 class Game extends React.Component {
 
-  // Define some attributes
+  // Define some state attributes
   constructor(props) {
     super(props);
     this.state = {
+      // Game move history
       history: [{
-        squares: Array(9).fill(null),
-        clickedSquareCol: -1,
-        clickedSquareRow: -1,
+        squares: Array(9).fill(null), // contains the current pieces on the board in this move
+        clickedSquareCol: -1, // column of the clicked square in this move
+        clickedSquareRow: -1, // row of the clicked square in this move
       }],
+      // Move number
       stepNumber: 0,
+      // Is X the next player?
       xIsNext: true,
     };
   }
 
+  // Process a click at the i'th square
   handleClick(i) {
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const current = history[history.length - 1];
-    const squares = current.squares.slice();
+    // Get the current history
+    const history = this.state.history.slice(0, this.state.stepNumber + 1); // all history up to current step number
+    const current = history[history.length - 1]; // current history
+    const squares = current.squares.slice(); // current state of board pieces
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
+
+    // Update the board pieces at square i
     squares[i] = this.state.xIsNext ? 'X' : 'O';
+
+    // Update state
     this.setState({
       history: history.concat([{
         squares: squares,
@@ -103,8 +125,13 @@ class Game extends React.Component {
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
+    console.log("==============================");
+    console.log("HISTORY: " + JSON.stringify(this.state.history));
+    console.log("STEPNUMBER: " + this.state.stepNumber);
+    console.log("XISNEXT: " + this.state.xIsNext);
   }
 
+  // Jump to a previous state
   jumpTo(step) {
     this.setState({
       stepNumber: step,
@@ -112,10 +139,12 @@ class Game extends React.Component {
     });
   }
 
+  // Render a Game component
   render() {
-    const history = this.state.history;
-    const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
+    const history = this.state.history; // all history
+    const current = history[this.state.stepNumber]; // the current state
+    const winner = calculateWinner(current.squares); //
+
 
     // step = an element in the 'history' array game state
     // move = the i'th move of the game
@@ -155,7 +184,11 @@ class Game extends React.Component {
   }
 }
 
+// Given a series of squares, detect if a winner is present.
+// Returns the name of the winning player if a winner is found,
+// and returns null otherwise.
 function calculateWinner(squares) {
+  // Winning indexes
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -166,10 +199,12 @@ function calculateWinner(squares) {
     [0, 4, 8],
     [2, 4, 6],
   ];
+
+  // Go thru every possible winning combination
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
-    console.log(squares);
-    console.log(a + " " + b + " " + c);
+    //console.log(squares);
+    //console.log(a + " " + b + " " + c);
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return squares[a];
     }
@@ -179,6 +214,7 @@ function calculateWinner(squares) {
 
 // ========================================
 
+// Render a Game component to DOM
 ReactDOM.render(
   <Game />,
   document.getElementById('root')
