@@ -145,8 +145,9 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber]; // the current state
     const winner = calculateWinner(current.squares); // return object containing winning squares and their indexes
 
-    // step = an element in the 'history' array game state
-    // move = the i'th move of the game
+    // Generate buttons to 'step back' into a previous state.
+    // * step = an element in the 'history' array game state
+    // * move = the i'th move of the game
     const moves = history.map((step, move) => {
       const desc = move ?
         'Go to move #' + move + " (" + step.clickedSquareCol + ", " + step.clickedSquareRow + ")" :
@@ -158,6 +159,7 @@ class Game extends React.Component {
       );
     });
 
+    // Update status display
     let status;
     if (winner) {
       status = 'Winner: ' + winner["squares"][0];
