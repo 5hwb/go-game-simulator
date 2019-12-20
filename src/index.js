@@ -108,6 +108,8 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1); // all history up to current step number
     const current = history[history.length - 1]; // current history
     const squares = current.squares.slice(); // current state of board pieces
+    
+    // Do not do anything if the game is finished or the clicked square has already been clicked
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
