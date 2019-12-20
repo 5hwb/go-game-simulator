@@ -6,9 +6,13 @@ import './index.css';
 // SQUARE COMPONENT
 // ========================================
 function Square(props) {
+
+  // Set appropriate CSS classes if square is part of the winning combination
+  var className = (props.isWinnerSquare) ? "square square-winner" : "square";
+
   return (
     <button
-      className="square"
+      className={className}
       onClick={props.onClick}
     >
       {props.value}
@@ -23,10 +27,13 @@ class Board extends React.Component {
 
   // Render a square element of the board
   renderSquare(i) {
+    // Check if the square being rendered is part of the winning combination
+    var isWinnerSquare = this.props.winnerSquares.includes(i);
     return (
       <Square
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
+        isWinnerSquare={isWinnerSquare}
       />
     );
   }
@@ -108,7 +115,7 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1); // all history up to current step number
     const current = history[history.length - 1]; // current history
     const squares = current.squares.slice(); // current state of board pieces
-    
+
     // Do not do anything if the game is finished or the clicked square has already been clicked
     if (calculateWinner(squares) || squares[i]) {
       return;
@@ -170,12 +177,16 @@ class Game extends React.Component {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
 
+    // Get list of indexes of winning squares
+    let winnerSquares = (winner != null) ? winner.winningSquares : [];
+
     return (
       <div className="game">
         <div className="game-board">
           <Board
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
+            winnerSquares={winnerSquares}
           />
         </div>
 
@@ -212,7 +223,7 @@ function calculateWinner(squares) {
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return {
         squares: [squares[a], squares[b], squares[c]],
-        values: [a, b, c]
+        winningSquares: [a, b, c]
       };
     }
   }
