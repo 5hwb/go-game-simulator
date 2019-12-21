@@ -131,7 +131,7 @@ class Game extends React.Component {
     // Update the board pieces at square i
     squares[i] = this.state.xIsNext ? 'X' : 'O';
 
-    // Calculate coordinates for the state
+    // Calculate col-row coordinates for the state
     var coordinates = convertIndexToCoordinates(i, 3);
 
     // Update state
@@ -191,18 +191,35 @@ class Game extends React.Component {
     let winnerSquares = (winner != null) ? winner.winningSquares : [];
 
     return (
-      <div className="game">
-        <div className="game-board">
-          <Board
-            squares={current.squares}
-            onClick={(i) => this.handleClick(i)}
-            winnerSquares={winnerSquares}
+      <div>
+        {/* GAME SETTINGS */}
+        <form className="game-settings">
+          <label>Settings</label>
+          <input
+            id="game-cols"
+            value="3"
           />
-        </div>
+          <input
+            id="game-rows"
+            value="3"
+          />
+          <button>New game</button>
+        </form>
 
-        <div className="game-info">
-          <div>{status}</div>
-          <ol>{moves}</ol>
+        {/* GAME BOARD */}
+        <div className="game">
+          <div className="game-board">
+            <Board
+              squares={current.squares}
+              onClick={(i) => this.handleClick(i)}
+              winnerSquares={winnerSquares}
+            />
+          </div>
+
+          <div className="game-info">
+            <div>{status}</div>
+            <ol>{moves}</ol>
+          </div>
         </div>
       </div>
     );

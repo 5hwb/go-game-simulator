@@ -49,6 +49,20 @@ ol, ul {
   flex-direction: row;
 }
 
+.game-settings {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.game-settings > input {
+  width: 300px;
+}
+
+.game-settings > button {
+  width: 80px;
+}
+
 .game-info {
   margin-left: 20px;
 }
