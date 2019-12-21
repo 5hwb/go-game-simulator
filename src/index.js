@@ -38,8 +38,8 @@ function generateSquare(numOfCols, numOfRows) {
   return vals;
 }
 
-function convertIndexToCoordinates(i) {
-  return [(i % 3), Math.floor(i / 3)];
+function convertIndexToCoordinates(i, numOfCols) {
+  return [(i % numOfCols), Math.floor(i / numOfCols)];
 }
 
 
@@ -131,12 +131,15 @@ class Game extends React.Component {
     // Update the board pieces at square i
     squares[i] = this.state.xIsNext ? 'X' : 'O';
 
+    // Calculate coordinates for the state
+    var coordinates = convertIndexToCoordinates(i, 3);
+
     // Update state
     this.setState({
       history: history.concat([{
         squares: squares,
-        clickedSquareCol: (i % 3) + 1,           // get the column from the index
-        clickedSquareRow: Math.floor(i / 3) + 1, // get the row from the index
+        clickedSquareCol: coordinates[0] + 1, // get the column from the index
+        clickedSquareRow: coordinates[1] + 1, // get the row from the index
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
