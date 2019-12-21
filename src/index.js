@@ -20,6 +20,29 @@ function Square(props) {
   );
 }
 
+// Generate a 2D array with the elements arranged as shown:
+/* [0,1,2],
+   [3,4,5],
+   [6,7,8] */
+// This 2D array will be used to generate the grid of squares.
+function generateSquare(numOfCols, numOfRows) {
+  var vals = [];
+  for (var i = 0; i < numOfRows; i++) {
+    var valRow = [];
+    for (var j = 0; j < numOfCols; j++) {
+      valRow.push(j + (i*numOfCols));
+    }
+    vals.push(valRow);
+  }
+
+  return vals;
+}
+
+function convertIndexToCoordinates(i) {
+  return [(i % 3), Math.floor(i / 3)];
+}
+
+
 // ========================================
 // BOARD COMPONENT
 // ========================================
@@ -60,23 +83,7 @@ class Board extends React.Component {
     const numOfCols = 3;
     const numOfRows = 3;
 
-    // Generate a 2D array with the elements arranged as shown:
-    /*
-    var vals = [
-      [0,1,2],
-      [3,4,5],
-      [6,7,8]
-    ];
-    */
-    // This 2D array will be used to generate the grid
-    var vals = [];
-    for (var i = 0; i < numOfRows; i++) {
-      var valRow = [];
-      for (var j = 0; j < numOfCols; j++) {
-        valRow.push(j + (i*numOfCols));
-      }
-      vals.push(valRow);
-    }
+    var vals = generateSquare(numOfCols, numOfRows);
 
     // Return div element containing 9 squares in a grid
     return (
