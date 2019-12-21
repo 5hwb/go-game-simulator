@@ -79,9 +79,9 @@ class Board extends React.Component {
 
   // Render a Board component
   render() {
-    // Dimension of board is hardcoded for now
-    const numOfCols = 3;
-    const numOfRows = 3;
+    // Get dimension of board from properties
+    const numOfCols = this.props.numOfCols;
+    const numOfRows = this.props.numOfRows;
 
     var vals = generateSquare(numOfCols, numOfRows);
 
@@ -102,7 +102,13 @@ class Game extends React.Component {
   // Define some state attributes
   constructor(props) {
     super(props);
+    this.handleChangeCols = this.handleChangeCols.bind(this);
+    this.handleChangeRows = this.handleChangeRows.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
+      // Board dimensions
+      boardCols: 3,
+      boardRows: 3,
       // Game move history
       history: [{
         squares: Array(9).fill(null), // contains the current pieces on the board in this move
@@ -132,7 +138,7 @@ class Game extends React.Component {
     squares[i] = this.state.xIsNext ? 'X' : 'O';
 
     // Calculate col-row coordinates for the state
-    var coordinates = convertIndexToCoordinates(i, 3);
+    var coordinates = convertIndexToCoordinates(i, this.state.boardCols);
 
     // Update state
     this.setState({
@@ -148,6 +154,19 @@ class Game extends React.Component {
     console.log("HISTORY: " + JSON.stringify(this.state.history));
     console.log("STEPNUMBER: " + this.state.stepNumber);
     console.log("XISNEXT: " + this.state.xIsNext);
+  }
+
+
+  handleChangeCols(e) {
+    this.setState({ boardCols: e.target.value });
+  }
+
+  handleChangeRows(e) {
+    this.setState({ boardRows: e.target.value });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
   }
 
   // Jump to a previous state
@@ -193,15 +212,17 @@ class Game extends React.Component {
     return (
       <div>
         {/* GAME SETTINGS */}
-        <form className="game-settings">
+        <form className="game-settings" onSubmit={this.handleSubmit}>
           <label>Settings</label>
           <input
             id="game-cols"
-            value="3"
+            onChange={this.handleChangeCols}
+            value={this.state.boardCols}
           />
           <input
             id="game-rows"
-            value="3"
+            onChange={this.handleChangeRows}
+            value={this.state.boardRows}
           />
           <button>New game</button>
         </form>
@@ -212,6 +233,8 @@ class Game extends React.Component {
             <Board
               squares={current.squares}
               onClick={(i) => this.handleClick(i)}
+              numOfCols={this.state.boardCols}
+              numOfRows={this.state.boardRows}
               winnerSquares={winnerSquares}
             />
           </div>
