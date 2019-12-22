@@ -95,6 +95,31 @@ class Board extends React.Component {
 }
 
 // ========================================
+// GameHistoryButtons COMPONENT
+// ========================================
+function GameHistoryButtons(props) {
+
+  function jumpTo(move) {
+    return props.jumpTo(move);
+  }
+
+  // Generate buttons to 'step back' into a previous state.
+  // * step = an element in the 'history' array game state
+  // * move = the i'th move of the game
+  const moves = props.history.map((step, move) => {
+    const desc = move ?
+      'Go to move #' + move + " (" + step.clickedSquareCol + ", " + step.clickedSquareRow + ")" :
+      'Go to game start';
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{desc}</button>
+      </li>
+    );
+  });
+  return moves;
+}
+
+// ========================================
 // GAME COMPONENT
 // ========================================
 class Game extends React.Component {
@@ -207,20 +232,6 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber]; // the current state
     const winner = calculateWinner(current.squares, this.state.boardCols, this.state.boardRows); // return object containing winning squares and their indexes
 
-    // Generate buttons to 'step back' into a previous state.
-    // * step = an element in the 'history' array game state
-    // * move = the i'th move of the game
-    const moves = history.map((step, move) => {
-      const desc = move ?
-        'Go to move #' + move + " (" + step.clickedSquareCol + ", " + step.clickedSquareRow + ")" :
-        'Go to game start';
-      return (
-        <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
-        </li>
-      );
-    });
-
     // Update status display
     let status;
     if (winner) {
@@ -265,7 +276,11 @@ class Game extends React.Component {
 
           <div className="game-info">
             <div>{status}</div>
-            <ol>{moves}</ol>
+            <ol>
+              <GameHistoryButtons
+                history={this.state.history}
+                jumpTo={this.jumpTo} />
+            </ol>
           </div>
         </div>
       </div>
