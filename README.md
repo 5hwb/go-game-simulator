@@ -7,6 +7,5 @@ Note: work in progress! For now, this is just an improved version of the [tic-ta
 ## TODO
 
 * Display message if result was a draw
-* Redefine the calculateWinner() function to not be based on hardcoded values
 
 [React info](react-info.md)
