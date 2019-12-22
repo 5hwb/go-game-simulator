@@ -8,6 +8,5 @@ Note: work in progress! For now, this is just an improved version of the [tic-ta
 
 * Display message if result was a draw
 * Redefine the calculateWinner() function to not be based on hardcoded values
-* Allow the size of the tic-tac-toe board to be customised
 
 [React info](react-info.md)

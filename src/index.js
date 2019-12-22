@@ -109,6 +109,9 @@ class Game extends React.Component {
       // Board dimensions
       boardCols: 3,
       boardRows: 3,
+      // New board dimensions (for updating settings)
+      newBoardCols: 3,
+      newBoardRows: 3,
       // Game move history
       history: [{
         squares: Array(9).fill(null), // contains the current pieces on the board in this move
@@ -120,6 +123,20 @@ class Game extends React.Component {
       // Is X the next player?
       xIsNext: true,
     };
+    this.resetState();
+  }
+
+  // Reset the game state (start a new game)
+  resetState() {
+    this.setState({
+      history: [{
+        squares: Array(9).fill(null),
+        clickedSquareCol: -1,
+        clickedSquareRow: -1,
+      }],
+      stepNumber: 0,
+      xIsNext: true,
+    });
   }
 
   // Process a click at the i'th square
@@ -156,17 +173,24 @@ class Game extends React.Component {
     console.log("XISNEXT: " + this.state.xIsNext);
   }
 
-
+  // Set the number of columns for the next game
   handleChangeCols(e) {
-    this.setState({ boardCols: e.target.value });
+    this.setState({ newBoardCols: e.target.value });
   }
 
+  // Set the number of rows for the next game
   handleChangeRows(e) {
-    this.setState({ boardRows: e.target.value });
+    this.setState({ newBoardRows: e.target.value });
   }
 
+  // Submit the form and start a new game with the new dimensions
   handleSubmit(e) {
     e.preventDefault();
+    this.setState({
+      boardCols: this.state.newBoardCols,
+      boardRows: this.state.newBoardRows,
+    });
+    this.resetState();
   }
 
   // Jump to a previous state
@@ -217,12 +241,12 @@ class Game extends React.Component {
           <input
             id="game-cols"
             onChange={this.handleChangeCols}
-            value={this.state.boardCols}
+            value={this.state.newBoardCols}
           />
           <input
             id="game-rows"
             onChange={this.handleChangeRows}
-            value={this.state.boardRows}
+            value={this.state.newBoardRows}
           />
           <button>New game</button>
         </form>
