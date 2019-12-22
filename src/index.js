@@ -123,7 +123,6 @@ class Game extends React.Component {
       // Is X the next player?
       xIsNext: true,
     };
-    this.resetState();
   }
 
   // Reset the game state (start a new game)
