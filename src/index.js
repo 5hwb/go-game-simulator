@@ -146,7 +146,8 @@ class Game extends React.Component {
     const squares = current.squares.slice(); // current state of board pieces
 
     // Do not do anything if the game is finished or the clicked square has already been clicked
-    if (calculateWinner(squares) || squares[i]) {
+    if (calculateWinner(squares, this.state.boardCols, this.state.boardRows)
+        || squares[i]) {
       return;
     }
 
@@ -204,7 +205,7 @@ class Game extends React.Component {
   render() {
     const history = this.state.history; // all history
     const current = history[this.state.stepNumber]; // the current state
-    const winner = calculateWinner(current.squares); // return object containing winning squares and their indexes
+    const winner = calculateWinner(current.squares, this.state.boardCols, this.state.boardRows); // return object containing winning squares and their indexes
 
     // Generate buttons to 'step back' into a previous state.
     // * step = an element in the 'history' array game state
@@ -275,8 +276,8 @@ class Game extends React.Component {
 // Given a series of squares, detect if a winner is present.
 // Returns the name of the winning player if a winner is found,
 // and returns null otherwise.
-function calculateWinner(squares) {
-  // Winning indexes
+function calculateWinner(squares, numOfCols, numOfRows) {
+  /* Winning indexes
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -286,20 +287,45 @@ function calculateWinner(squares) {
     [2, 5, 8],
     [0, 4, 8],
     [2, 4, 6],
-  ];
+  ];*/
 
   // Go thru every possible winning combination
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    //console.log(squares);
-    //console.log(a + " " + b + " " + c);
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return {
-        squares: [squares[a], squares[b], squares[c]],
-        winningSquares: [a, b, c]
-      };
+  for (var r = 1; r < numOfRows - 1; r++) {
+    for (var c = 1; c < numOfCols - 1; c++) {
+      // Indexes of squares to check
+      const curr = r*numOfCols + c;
+      const left = r*numOfCols + (c-1);
+      const right = r*numOfCols + (c+1);
+      const top = (r-1)*numOfCols + c;
+      const bottom = (r+1)*numOfCols + c;
+      const topLeft = (r-1)*numOfCols + (c-1);
+      const topRight = (r-1)*numOfCols + (c+1);
+      const bottLeft = (r+1)*numOfCols + (c-1);
+      const bottRight = (r+1)*numOfCols + (c+1);
+
+      // Patterns
+      const lines = [
+        [left, curr, right], // horizontal
+        [top, curr, bottom], // horizontal
+        [topLeft, curr, bottRight], // backslash
+        [topRight, curr, bottLeft], // forward slash
+      ];
+
+      // Go thru every pattern to see which one contains a win
+      for (var i = 0; i < lines.length; i++) {
+        const [a, b, c] = lines[i];
+        console.log("RESULTS: " + a + " " + b + " " + c);
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+          return {
+            squares: [squares[a], squares[b], squares[c]],
+            winningSquares: [a, b, c]
+          };
+        }
+      }
+
     }
   }
+
   return null;
 }
 
