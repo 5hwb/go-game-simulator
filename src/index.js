@@ -97,26 +97,34 @@ class Board extends React.Component {
 // ========================================
 // GameHistoryButtons COMPONENT
 // ========================================
-function GameHistoryButtons(props) {
+class GameHistoryButtons extends React.Component {
 
-  function jumpTo(move) {
-    return props.jumpTo(move);
+  constructor(props) {
+    super(props);
+    this.handleJumpTo = this.handleJumpTo.bind(this);
   }
 
-  // Generate buttons to 'step back' into a previous state.
-  // * step = an element in the 'history' array game state
-  // * move = the i'th move of the game
-  const moves = props.history.map((step, move) => {
-    const desc = move ?
-      'Go to move #' + move + " (" + step.clickedSquareCol + ", " + step.clickedSquareRow + ")" :
-      'Go to game start';
-    return (
-      <li key={move}>
-        <button onClick={() => jumpTo(move)}>{desc}</button>
-      </li>
-    );
-  });
-  return moves;
+  handleJumpTo(e) {
+    return this.props.handleJumpTo(e.target.value);
+  }
+
+  render() {
+    // Generate buttons to 'step back' into a previous state.
+    // * step = an element in the 'history' array game state
+    // * move = the i'th move of the game
+    const moves = this.props.history.map((step, move) => {
+      console.log("MOVE: " + move);
+      const desc = move ?
+        'Go to move #' + move + " (" + step.clickedSquareCol + ", " + step.clickedSquareRow + ")" :
+        'Go to game start';
+      return (
+        <li key={move}>
+          <button value={move} onClick={this.handleJumpTo}>{desc}</button>
+        </li>
+      );
+    });
+    return moves;
+  }
 }
 
 // ========================================
@@ -130,6 +138,7 @@ class Game extends React.Component {
     this.handleChangeCols = this.handleChangeCols.bind(this);
     this.handleChangeRows = this.handleChangeRows.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleJumpTo = this.handleJumpTo.bind(this);
     this.state = {
       // Board dimensions
       boardCols: 3,
@@ -219,7 +228,7 @@ class Game extends React.Component {
   }
 
   // Jump to a previous state
-  jumpTo(step) {
+  handleJumpTo(step) {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
@@ -279,7 +288,7 @@ class Game extends React.Component {
             <ol>
               <GameHistoryButtons
                 history={this.state.history}
-                jumpTo={this.jumpTo} />
+                handleJumpTo={this.handleJumpTo} />
             </ol>
           </div>
         </div>
