@@ -95,6 +95,39 @@ class Board extends React.Component {
 }
 
 // ========================================
+// GameHistoryButtons COMPONENT
+// ========================================
+class GameHistoryButtons extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.handleJumpTo = this.handleJumpTo.bind(this);
+  }
+
+  handleJumpTo(e) {
+    return this.props.handleJumpTo(e.target.value);
+  }
+
+  render() {
+    // Generate buttons to 'step back' into a previous state.
+    // * step = an element in the 'history' array game state
+    // * move = the i'th move of the game
+    const moves = this.props.history.map((step, move) => {
+      console.log("MOVE: " + move);
+      const desc = move ?
+        'Go to move #' + move + " (" + step.clickedSquareCol + ", " + step.clickedSquareRow + ")" :
+        'Go to game start';
+      return (
+        <li key={move}>
+          <button value={move} onClick={this.handleJumpTo}>{desc}</button>
+        </li>
+      );
+    });
+    return moves;
+  }
+}
+
+// ========================================
 // GAME COMPONENT
 // ========================================
 class Game extends React.Component {
@@ -105,6 +138,7 @@ class Game extends React.Component {
     this.handleChangeCols = this.handleChangeCols.bind(this);
     this.handleChangeRows = this.handleChangeRows.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleJumpTo = this.handleJumpTo.bind(this);
     this.state = {
       // Board dimensions
       boardCols: 3,
@@ -194,7 +228,7 @@ class Game extends React.Component {
   }
 
   // Jump to a previous state
-  jumpTo(step) {
+  handleJumpTo(step) {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
@@ -206,20 +240,6 @@ class Game extends React.Component {
     const history = this.state.history; // all history
     const current = history[this.state.stepNumber]; // the current state
     const winner = calculateWinner(current.squares, this.state.boardCols, this.state.boardRows); // return object containing winning squares and their indexes
-
-    // Generate buttons to 'step back' into a previous state.
-    // * step = an element in the 'history' array game state
-    // * move = the i'th move of the game
-    const moves = history.map((step, move) => {
-      const desc = move ?
-        'Go to move #' + move + " (" + step.clickedSquareCol + ", " + step.clickedSquareRow + ")" :
-        'Go to game start';
-      return (
-        <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
-        </li>
-      );
-    });
 
     // Update status display
     let status;
@@ -265,7 +285,11 @@ class Game extends React.Component {
 
           <div className="game-info">
             <div>{status}</div>
-            <ol>{moves}</ol>
+            <ol>
+              <GameHistoryButtons
+                history={this.state.history}
+                handleJumpTo={this.handleJumpTo} />
+            </ol>
           </div>
         </div>
       </div>
