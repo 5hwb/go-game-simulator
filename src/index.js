@@ -312,20 +312,33 @@ function calculateWinner(squares, numOfCols, numOfRows) {
     [0, 4, 8],
     [2, 4, 6],
   ];*/
+  
+  // Get the index of the square array with row and column indexes
+  function getIndex(r, c) {
+    var isValidRowIndex = (r >= 0 && r < numOfRows);
+    var isValidColIndex = (c >= 0 && c < numOfCols);
+    
+    // Check if indexes are valid
+    if (isValidRowIndex && isValidColIndex) {
+      return r*numOfCols + c;
+    }
+    
+    return null;
+  }
 
   // Go thru every possible winning combination
-  for (var r = 1; r < numOfRows - 1; r++) {
-    for (var c = 1; c < numOfCols - 1; c++) {
+  for (var r = 0; r < numOfRows; r++) {
+    for (var c = 0; c < numOfCols; c++) {
       // Indexes of squares to check
-      const curr = r*numOfCols + c;
-      const left = r*numOfCols + (c-1);
-      const right = r*numOfCols + (c+1);
-      const top = (r-1)*numOfCols + c;
-      const bottom = (r+1)*numOfCols + c;
-      const topLeft = (r-1)*numOfCols + (c-1);
-      const topRight = (r-1)*numOfCols + (c+1);
-      const bottLeft = (r+1)*numOfCols + (c-1);
-      const bottRight = (r+1)*numOfCols + (c+1);
+      const curr = getIndex(r, c);
+      const left = getIndex(r, (c-1));
+      const right = getIndex(r, (c+1));
+      const top = getIndex((r-1), c);
+      const bottom = getIndex((r+1), c);
+      const topLeft = getIndex((r-1), (c-1));
+      const topRight = getIndex((r-1), (c+1));
+      const bottLeft = getIndex((r+1), (c-1));
+      const bottRight = getIndex((r+1), (c+1));
 
       // Patterns
       const lines = [
