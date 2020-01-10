@@ -97,6 +97,54 @@ class Board extends React.Component {
 }
 
 // ========================================
+// SETTINGS COMPONENT
+// Contains a form where the user can modify the size of the Board.
+// ========================================
+class Settings extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.handleChangeCols = this.handleChangeCols.bind(this);
+    this.handleChangeRows = this.handleChangeRows.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  // Set the number of columns for the next game
+  handleChangeCols(e) {
+    return this.props.handleChangeCols(e);
+  }
+
+  // Set the number of rows for the next game
+  handleChangeRows(e) {
+    return this.props.handleChangeRows(e);
+  }
+
+  // Submit the form and start a new game with the new dimensions
+  handleSubmit(e) {
+    return this.props.handleSubmit(e);
+  }
+
+  render() {
+    return (
+      <form className="game-settings" onSubmit={this.handleSubmit}>
+        <label>Settings</label>
+        <input
+          id="game-cols"
+          onChange={this.handleChangeCols}
+          value={this.props.newBoardCols}
+        />
+        <input
+          id="game-rows"
+          onChange={this.handleChangeRows}
+          value={this.props.newBoardRows}
+        />
+        <button>New game</button>
+      </form>
+    );
+  }
+}
+
+// ========================================
 // GAMEHISTORYBUTTONS COMPONENT
 // Holds buttons that allow the player to revert to an earlier stage in the game.
 // ========================================
@@ -260,20 +308,12 @@ class Game extends React.Component {
     return (
       <div>
         {/* GAME SETTINGS */}
-        <form className="game-settings" onSubmit={this.handleSubmit}>
-          <label>Settings</label>
-          <input
-            id="game-cols"
-            onChange={this.handleChangeCols}
-            value={this.state.newBoardCols}
-          />
-          <input
-            id="game-rows"
-            onChange={this.handleChangeRows}
-            value={this.state.newBoardRows}
-          />
-          <button>New game</button>
-        </form>
+        <Settings
+          newBoardCols={this.state.newBoardCols}
+          newBoardRows={this.state.newBoardRows}
+          handleChangeCols={this.handleChangeCols}
+          handleChangeRows={this.handleChangeRows}
+          handleSubmit={this.handleSubmit} />
 
         {/* GAME BOARD */}
         <div className="game">
