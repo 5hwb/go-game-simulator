@@ -4,6 +4,7 @@ import './index.css';
 
 // ========================================
 // SQUARE COMPONENT
+// A Square is a cell on the Board component that holds a player piece.
 // ========================================
 function Square(props) {
 
@@ -45,6 +46,7 @@ function convertIndexToCoordinates(i, numOfCols) {
 
 // ========================================
 // BOARD COMPONENT
+// A Board is a grid of Square components, representing the board on which the game is played.
 // ========================================
 class Board extends React.Component {
 
@@ -95,7 +97,8 @@ class Board extends React.Component {
 }
 
 // ========================================
-// GameHistoryButtons COMPONENT
+// GAMEHISTORYBUTTONS COMPONENT
+// Holds buttons that allow the player to revert to an earlier stage in the game.
 // ========================================
 class GameHistoryButtons extends React.Component {
 
@@ -129,6 +132,7 @@ class GameHistoryButtons extends React.Component {
 
 // ========================================
 // GAME COMPONENT
+// The main component on which all other components are controlled by.
 // ========================================
 class Game extends React.Component {
 
@@ -312,17 +316,18 @@ function calculateWinner(squares, numOfCols, numOfRows) {
     [0, 4, 8],
     [2, 4, 6],
   ];*/
-  
-  // Get the index of the square array with row and column indexes
+
+  // Get the index of the square array with row and column indexes.
+  // Returns null if the indexes go beyond the bounds of the square
   function getIndex(r, c) {
     var isValidRowIndex = (r >= 0 && r < numOfRows);
     var isValidColIndex = (c >= 0 && c < numOfCols);
-    
+
     // Check if indexes are valid
     if (isValidRowIndex && isValidColIndex) {
       return r*numOfCols + c;
     }
-    
+
     return null;
   }
 
