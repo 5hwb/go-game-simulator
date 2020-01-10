@@ -54,8 +54,10 @@ class Board extends React.Component {
   renderSquare(i) {
     // Check if the square being rendered is part of the winning combination
     var isWinnerSquare = this.props.winnerSquares.includes(i);
+    // Set the key as its index
     return (
       <Square
+        key={i}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
         isWinnerSquare={isWinnerSquare}
@@ -72,8 +74,9 @@ class Board extends React.Component {
 
   // Map a 2D array input to a list of row elements
   renderAllRows(vals) {
+    // Set the key of the row to be the index of its 1st element
     return vals.map((valRow) =>
-      <div className="board-row">
+      <div className="board-row" key={valRow[0]}>
         {this.renderRow(valRow)}
       </div>
     );
