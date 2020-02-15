@@ -1,6 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { createStore } from 'redux';
+import { addSomething } from './actions';
+import someApp from './reducers';
+import { Provider } from 'react-redux';
+
+// ========================================
+// REDUX EXPERIMENT
+// ========================================
+const store = createStore(someApp);
+
+console.log(store.getState());
+
+const unsubscribe = store.subscribe(() => console.log(store.getState()))
+
+// Dispatch some actions
+store.dispatch(addSomething('This is a message!'));
+store.dispatch(addSomething('Another message!'));
+store.dispatch(addSomething('Tic tac toe or baduk? Thats the question'));
 
 // ========================================
 // SQUARE COMPONENT
@@ -418,6 +436,8 @@ function calculateWinner(squares, numOfCols, numOfRows) {
 
 // Render a Game component to DOM
 ReactDOM.render(
-  <Game />,
+  <Provider store={store}>
+    <Game />
+  </Provider>,
   document.getElementById('root')
 );
