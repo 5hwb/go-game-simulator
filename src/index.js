@@ -13,12 +13,17 @@ const store = createStore(someApp);
 
 console.log(store.getState());
 
-const unsubscribe = store.subscribe(() => console.log(store.getState()))
+const unsubscribe = store.subscribe(() => console.log(store.getState()));
 
 // Dispatch some actions
 store.dispatch(addSomething('This is a message!'));
 store.dispatch(addSomething('Another message!'));
 store.dispatch(addSomething('Tic tac toe or baduk? Thats the question'));
+
+/*function mapStateToProps(state) {
+  return {
+  };
+}*/
 
 // ========================================
 // SQUARE COMPONENT
@@ -417,7 +422,7 @@ function calculateWinner(squares, numOfCols, numOfRows) {
       // Go thru every pattern to see which one contains a win
       for (var i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
-        console.log("RESULTS: " + a + " " + b + " " + c);
+        //console.log("RESULTS: " + a + " " + b + " " + c);
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
           return {
             squares: [squares[a], squares[b], squares[c]],
