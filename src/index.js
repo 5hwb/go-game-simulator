@@ -5,6 +5,7 @@ import { createStore } from 'redux';
 import { addSomething } from './actions';
 import someApp from './reducers';
 import { Provider } from 'react-redux';
+import { connect } from 'react-redux';
 
 // ========================================
 // REDUX EXPERIMENT
@@ -20,10 +21,11 @@ store.dispatch(addSomething('This is a message!'));
 store.dispatch(addSomething('Another message!'));
 store.dispatch(addSomething('Tic tac toe or baduk? Thats the question'));
 
-/*function mapStateToProps(state) {
+function mapStateToProps(state) {
   return {
+    aListOfSomething: state.aListOfSomething
   };
-}*/
+}
 
 // ========================================
 // SQUARE COMPONENT
@@ -439,10 +441,12 @@ function calculateWinner(squares, numOfCols, numOfRows) {
 
 // ========================================
 
+const RealGame = connect(mapStateToProps)(Game);
+
 // Render a Game component to DOM
 ReactDOM.render(
   <Provider store={store}>
-    <Game />
+    <RealGame />
   </Provider>,
   document.getElementById('root')
 );
