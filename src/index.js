@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { createStore } from 'redux';
-import { addSomething } from './actions';
-import someApp from './reducers';
+import { addSomething, changeBoardCols, changeBoardRows } from './actions';
+import allReducers from './reducers';
 import { Provider } from 'react-redux';
 import { connect } from 'react-redux';
 
 // ========================================
 // REDUX EXPERIMENT
 // ========================================
-const store = createStore(someApp);
+const store = createStore(allReducers);
 
 console.log(store.getState());
 
@@ -20,10 +20,14 @@ const unsubscribe = store.subscribe(() => console.log(store.getState()));
 store.dispatch(addSomething('This is a message!'));
 store.dispatch(addSomething('Another message!'));
 store.dispatch(addSomething('Tic tac toe or baduk? Thats the question'));
+store.dispatch(changeBoardCols(89));
+store.dispatch(changeBoardRows(37));
 
 function mapStateToProps(state) {
   return {
-    aListOfSomething: state.aListOfSomething
+    aListOfSomething: state.aListOfSomething,
+    boardCols: state.boardCols,
+    boardRows: state.boardRows,
   };
 }
 
