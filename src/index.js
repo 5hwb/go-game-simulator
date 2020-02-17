@@ -25,9 +25,9 @@ store.dispatch(changeBoardRows(37));
 
 function mapStateToProps(state) {
   return {
-    aListOfSomething: state.aListOfSomething,
-    boardCols: state.boardCols,
-    boardRows: state.boardRows,
+    aListOfSomething: state.addSomething.aListOfSomething,
+    boardCols: state.changeSettings.boardCols,
+    boardRows: state.changeSettings.boardRows,
   };
 }
 
@@ -305,6 +305,7 @@ class Game extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.dispatch(addSomething('I started a new game with dimensions (' + this.state.newBoardCols + ',' + this.state.newBoardRows + ')!' ));
+    console.log("aListOfSomething = " + this.props.aListOfSomething[0]['text']);
     this.setState({
       boardCols: this.state.newBoardCols,
       boardRows: this.state.newBoardRows,
