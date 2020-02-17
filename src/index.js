@@ -20,8 +20,8 @@ const unsubscribe = store.subscribe(() => console.log(store.getState()));
 store.dispatch(addSomething('This is a message!'));
 store.dispatch(addSomething('Another message!'));
 store.dispatch(addSomething('Tic tac toe or baduk? Thats the question'));
-store.dispatch(changeBoardCols(89));
-store.dispatch(changeBoardRows(37));
+//store.dispatch(changeBoardCols(3));
+//store.dispatch(changeBoardRows(3));
 
 function mapStateToProps(state) {
   return {
@@ -176,6 +176,8 @@ class Settings extends React.Component {
   }
 }
 
+const ConnectedSettings = connect(mapStateToProps)(Settings);
+
 // ========================================
 // GAMEHISTORYBUTTONS COMPONENT
 // Holds buttons that allow the player to revert to an earlier stage in the game.
@@ -224,9 +226,6 @@ class Game extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleJumpTo = this.handleJumpTo.bind(this);
     this.state = {
-      // Board dimensions
-      boardCols: 3,
-      boardRows: 3,
       // New board dimensions (for updating settings)
       newBoardCols: 3,
       newBoardRows: 3,
@@ -264,7 +263,7 @@ class Game extends React.Component {
     const squares = current.squares.slice(); // current state of board pieces
 
     // Do not do anything if the game is finished or the clicked square has already been clicked
-    if (calculateWinner(squares, this.state.boardCols, this.state.boardRows)
+    if (calculateWinner(squares, this.props.boardCols, this.props.boardRows)
         || squares[i]) {
       return;
     }
@@ -273,7 +272,7 @@ class Game extends React.Component {
     squares[i] = this.state.xIsNext ? 'X' : 'O';
 
     // Calculate col-row coordinates for the state
-    var coordinates = convertIndexToCoordinates(i, this.state.boardCols);
+    var coordinates = convertIndexToCoordinates(i, this.props.boardCols);
 
     // Update state
     this.setState({
@@ -305,11 +304,16 @@ class Game extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.dispatch(addSomething('I started a new game with dimensions (' + this.state.newBoardCols + ',' + this.state.newBoardRows + ')!' ));
-    console.log("aListOfSomething = " + this.props.aListOfSomething[0]['text']);
+    console.log("boardCols = " + this.props.boardCols);
+    console.log("boardRows = " + this.props.boardRows);
+    /*
     this.setState({
       boardCols: this.state.newBoardCols,
       boardRows: this.state.newBoardRows,
     });
+    */
+    this.props.dispatch(changeBoardCols(this.state.newBoardCols));
+    this.props.dispatch(changeBoardRows(this.state.newBoardRows));
     this.resetState();
   }
 
@@ -325,7 +329,7 @@ class Game extends React.Component {
   render() {
     const history = this.state.history; // all history
     const current = history[this.state.stepNumber]; // the current state
-    const winner = calculateWinner(current.squares, this.state.boardCols, this.state.boardRows); // return object containing winning squares and their indexes
+    const winner = calculateWinner(current.squares, this.props.boardCols, this.props.boardRows); // return object containing winning squares and their indexes
 
     // Update status display
     let status;
@@ -342,7 +346,7 @@ class Game extends React.Component {
     return (
       <div>
         {/* GAME SETTINGS */}
-        <Settings
+        <ConnectedSettings
           newBoardCols={this.state.newBoardCols}
           newBoardRows={this.state.newBoardRows}
           handleChangeCols={this.handleChangeCols}
@@ -355,8 +359,8 @@ class Game extends React.Component {
             <Board
               squares={current.squares}
               onClick={(i) => this.handleClick(i)}
-              numOfCols={this.state.boardCols}
-              numOfRows={this.state.boardRows}
+              numOfCols={this.props.boardCols}
+              numOfRows={this.props.boardRows}
               winnerSquares={winnerSquares}
             />
           </div>

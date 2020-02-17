@@ -10,11 +10,13 @@ const initialRandomState = {
 };
 
 const initialSettingsState = {
+  // Board dimensions
   boardCols: 3,
   boardRows: 3,
 };
 
 const initialHistoryState = {
+  // Game move history
   history: [
     {
         squares: Array(9).fill(null),
@@ -25,7 +27,9 @@ const initialHistoryState = {
 };
 
 const initialGameState = {
+  // Move number
   stepNumber: 0,
+  // Is X the next player?
   xIsNext: true,
 };
 
