@@ -300,6 +300,7 @@ class Game extends React.Component {
   // Submit the form and start a new game with the new dimensions
   handleSubmit(e) {
     e.preventDefault();
+    this.props.dispatch(addSomething('I started a new game with dimensions (' + this.state.newBoardCols + ',' + this.state.newBoardRows + ')!' ));
     this.setState({
       boardCols: this.state.newBoardCols,
       boardRows: this.state.newBoardRows,
