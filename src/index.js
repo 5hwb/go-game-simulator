@@ -29,8 +29,8 @@ function mapStateToProps(state) {
     aListOfSomething: state.addSomething.aListOfSomething,
     boardCols: state.changeSettings.boardCols,
     boardRows: state.changeSettings.boardRows,
-    stepNumber: state.changeSettings.stepNumber,
-    xIsNext: state.changeSettings.xIsNext,
+    stepNumber: state.changeHistory.stepNumber,
+    xIsNext: state.changeHistory.xIsNext,
     history: state.changeHistory.history,
   };
 }
@@ -283,6 +283,8 @@ class Game extends React.Component {
 
     // Update the board pieces at square i
     squares[i] = this.props.xIsNext ? 'X' : 'O';
+    console.log("NEW STATE: " + squares);
+    console.log(squares);
 
     // Update state
     this.props.dispatch(addToHistory(squares, coordinates));

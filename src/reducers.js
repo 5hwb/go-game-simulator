@@ -16,10 +16,6 @@ const initialSettingsState = {
   // Board dimensions
   boardCols: 3,
   boardRows: 3,
-  // Move number
-  stepNumber: 0,
-  // Is X the next player?
-  xIsNext: true,
 };
 
 const initialHistoryState = {
@@ -31,6 +27,10 @@ const initialHistoryState = {
         clickedSquareRow: -1,
     }
   ],
+  // Move number
+  stepNumber: 0,
+  // Is X the next player?
+  xIsNext: true,
 };
 
 function addSomething(state = initialRandomState, action) {
@@ -85,6 +85,13 @@ function changeHistory(state = initialHistoryState, action) {
     case ADD_TO_HISTORY:
       // Get the current history
       const history = state.history.slice(0, state.stepNumber + 1); // all history up to current step number
+      
+      console.log("------------------------------");
+      console.log("rSQUARES: " + action.squares);
+      console.log("rCOORDS: " + action.coordinates);
+      console.log("rHISTORY: " + JSON.stringify(state.history));
+      console.log("rSTEPNUMBER: " + state.stepNumber);
+      console.log("rXISNEXT: " + state.xIsNext);
           
       return {
         ...state,
