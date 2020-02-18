@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { createStore } from 'redux';
-import { addSomething, changeBoardCols, changeBoardRows } from './actions';
+import { addSomething, changeBoardCols, changeBoardRows, resetState } from './actions';
 import allReducers from './reducers';
 import { Provider } from 'react-redux';
 import { connect } from 'react-redux';
@@ -23,6 +23,7 @@ store.dispatch(addSomething('Tic tac toe or baduk? Thats the question'));
 //store.dispatch(changeBoardCols(3));
 //store.dispatch(changeBoardRows(3));
 
+// Maps state values to prop values to be used in the component
 function mapStateToProps(state) {
   return {
     aListOfSomething: state.addSomething.aListOfSomething,
@@ -139,23 +140,43 @@ class Settings extends React.Component {
     this.handleChangeCols = this.handleChangeCols.bind(this);
     this.handleChangeRows = this.handleChangeRows.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      newBoardCols: 3,
+      newBoardRows: 3,
+    };
   }
 
   // Set the number of columns for the next game
   handleChangeCols(e) {
-    return this.props.handleChangeCols(e);
+    console.log("CHANGING THE COL FROM " + this.props.boardCols + " TO " + e.target.value);
+    this.setState({ newBoardCols: e.target.value });
   }
 
   // Set the number of rows for the next game
   handleChangeRows(e) {
-    return this.props.handleChangeRows(e);
+    console.log("CHANGING THE ROW FROM " + this.props.boardRows + " TO " + e.target.value);    
+    this.setState({ newBoardRows: e.target.value });
   }
 
   // Submit the form and start a new game with the new dimensions
   handleSubmit(e) {
-    return this.props.handleSubmit(e);
+    e.preventDefault();
+    //this.props.dispatch(addSomething('I started a new game with dimensions (' + this.state.newBoardCols + ',' + this.state.newBoardRows + ')!' ));
+    console.log("boardCols = " + this.props.boardCols);
+    console.log("boardRows = " + this.props.boardRows);
+    /*
+    this.setState({
+      boardCols: this.state.newBoardCols,
+      boardRows: this.state.newBoardRows,
+    });
+    */
+    this.props.dispatch(changeBoardCols(this.state.newBoardCols));
+    this.props.dispatch(changeBoardRows(this.state.newBoardRows));
+    
+    // Reset the game state (start a new game)
+    this.props.dispatch(resetState());
   }
-
+  
   render() {
     return (
       <form className="game-settings" onSubmit={this.handleSubmit}>
@@ -163,12 +184,12 @@ class Settings extends React.Component {
         <input
           id="game-cols"
           onChange={this.handleChangeCols}
-          value={this.props.newBoardCols}
+          value={this.newBoardCols}
         />
         <input
           id="game-rows"
           onChange={this.handleChangeRows}
-          value={this.props.newBoardRows}
+          value={this.newBoardRows}
         />
         <button>New game</button>
       </form>
@@ -221,14 +242,8 @@ class Game extends React.Component {
   // Define some state attributes
   constructor(props) {
     super(props);
-    this.handleChangeCols = this.handleChangeCols.bind(this);
-    this.handleChangeRows = this.handleChangeRows.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleJumpTo = this.handleJumpTo.bind(this);
     this.state = {
-      // New board dimensions (for updating settings)
-      newBoardCols: 3,
-      newBoardRows: 3,
       // Game move history
       history: [{
         squares: Array(9).fill(null), // contains the current pieces on the board in this move
@@ -241,20 +256,7 @@ class Game extends React.Component {
       xIsNext: true,
     };
   }
-
-  // Reset the game state (start a new game)
-  resetState() {
-    this.setState({
-      history: [{
-        squares: Array(9).fill(null),
-        clickedSquareCol: -1,
-        clickedSquareRow: -1,
-      }],
-      stepNumber: 0,
-      xIsNext: true,
-    });
-  }
-
+  
   // Process a click at the i'th square
   handleClick(i) {
     // Get the current history
@@ -290,33 +292,6 @@ class Game extends React.Component {
     console.log("XISNEXT: " + this.state.xIsNext);
   }
 
-  // Set the number of columns for the next game
-  handleChangeCols(e) {
-    this.setState({ newBoardCols: e.target.value });
-  }
-
-  // Set the number of rows for the next game
-  handleChangeRows(e) {
-    this.setState({ newBoardRows: e.target.value });
-  }
-
-  // Submit the form and start a new game with the new dimensions
-  handleSubmit(e) {
-    e.preventDefault();
-    this.props.dispatch(addSomething('I started a new game with dimensions (' + this.state.newBoardCols + ',' + this.state.newBoardRows + ')!' ));
-    console.log("boardCols = " + this.props.boardCols);
-    console.log("boardRows = " + this.props.boardRows);
-    /*
-    this.setState({
-      boardCols: this.state.newBoardCols,
-      boardRows: this.state.newBoardRows,
-    });
-    */
-    this.props.dispatch(changeBoardCols(this.state.newBoardCols));
-    this.props.dispatch(changeBoardRows(this.state.newBoardRows));
-    this.resetState();
-  }
-
   // Jump to a previous state
   handleJumpTo(step) {
     this.setState({
@@ -346,12 +321,7 @@ class Game extends React.Component {
     return (
       <div>
         {/* GAME SETTINGS */}
-        <ConnectedSettings
-          newBoardCols={this.state.newBoardCols}
-          newBoardRows={this.state.newBoardRows}
-          handleChangeCols={this.handleChangeCols}
-          handleChangeRows={this.handleChangeRows}
-          handleSubmit={this.handleSubmit} />
+        <ConnectedSettings />
 
         {/* GAME BOARD */}
         <div className="game">
