@@ -3,6 +3,7 @@ import {
   ADD_SOMETHING,
   CHANGE_BOARD_COLS,
   CHANGE_BOARD_ROWS,
+  RESET_STATE,
 } from './actions';
 
 const initialRandomState = {
@@ -13,6 +14,10 @@ const initialSettingsState = {
   // Board dimensions
   boardCols: 3,
   boardRows: 3,
+  // Move number
+  stepNumber: 0,
+  // Is X the next player?
+  xIsNext: true,
 };
 
 const initialHistoryState = {
@@ -24,13 +29,6 @@ const initialHistoryState = {
         clickedSquareRow: -1,
     }
   ],
-};
-
-const initialGameState = {
-  // Move number
-  stepNumber: 0,
-  // Is X the next player?
-  xIsNext: true,
 };
 
 function addSomething(state = initialRandomState, action) {
@@ -63,6 +61,17 @@ function changeSettings(state = initialSettingsState, action) {
       return {
         ...state,
         boardRows: action.num
+      };
+    case RESET_STATE:
+      return {
+        ...state,
+        history: [{
+          squares: Array(9).fill(null),
+          clickedSquareCol: -1,
+          clickedSquareRow: -1,
+        }],
+        stepNumber: 0,
+        xIsNext: true,
       };
     default:
       return state;
