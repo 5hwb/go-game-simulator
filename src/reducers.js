@@ -4,6 +4,7 @@ import {
   CHANGE_BOARD_COLS,
   CHANGE_BOARD_ROWS,
   RESET_STATE,
+  ADD_TO_HISTORY,
 } from './actions';
 
 const initialRandomState = {
@@ -78,9 +79,31 @@ function changeSettings(state = initialSettingsState, action) {
   }
 }
 
+function changeHistory(state = initialHistoryState, action) {
+  switch (action.type) {
+    case ADD_TO_HISTORY:
+      // Get the current history
+      const history = state.history.slice(0, state.stepNumber + 1); // all history up to current step number
+          
+      return {
+        ...state,
+        history: history.concat([{
+          squares: action.squares,
+          clickedSquareCol: action.coordinates[0] + 1, // get the column from the index
+          clickedSquareRow: action.coordinates[1] + 1, // get the row from the index
+        }]),
+        stepNumber: history.length,
+        xIsNext: !state.xIsNext,
+      };
+    default:
+      return state;
+  }
+}
+
 const allReducers = combineReducers({
   addSomething,
-  changeSettings
+  changeSettings,
+  changeHistory
 });
 
 export default allReducers;
