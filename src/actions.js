@@ -31,6 +31,6 @@ export function addToHistory(squares, coordinates) {
   return { type: ADD_TO_HISTORY, squares, coordinates };
 }
 
-export function jumpToPrevState() {
-  return { type: JUMP_TO_PREV_STATE };
+export function jumpToPrevState(step) {
+  return { type: JUMP_TO_PREV_STATE, step };
 }

@@ -5,6 +5,7 @@ import {
   CHANGE_BOARD_ROWS,
   RESET_STATE,
   ADD_TO_HISTORY,
+  JUMP_TO_PREV_STATE,
 } from './actions';
 
 const initialRandomState = {
@@ -94,6 +95,12 @@ function changeHistory(state = initialHistoryState, action) {
         }]),
         stepNumber: history.length,
         xIsNext: !state.xIsNext,
+      };
+    case JUMP_TO_PREV_STATE:
+      return {
+        ...state,
+        stepNumber: action.step,
+        xIsNext: (action.step % 2) === 0,
       };
     default:
       return state;

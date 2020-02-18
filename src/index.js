@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { createStore } from 'redux';
-import { addSomething, changeBoardCols, changeBoardRows, resetState } from './actions';
+import { addSomething, changeBoardCols, changeBoardRows, resetState, addToHistory, jumpToPrevState } from './actions';
 import allReducers from './reducers';
 import { Provider } from 'react-redux';
 import { connect } from 'react-redux';
@@ -29,6 +29,9 @@ function mapStateToProps(state) {
     aListOfSomething: state.addSomething.aListOfSomething,
     boardCols: state.changeSettings.boardCols,
     boardRows: state.changeSettings.boardRows,
+    stepNumber: state.changeSettings.stepNumber,
+    xIsNext: state.changeSettings.xIsNext,
+    history: state.changeHistory.history,
   };
 }
 
@@ -72,7 +75,6 @@ function generateSquare(numOfCols, numOfRows) {
 function convertIndexToCoordinates(i, numOfCols) {
   return [(i % numOfCols), Math.floor(i / numOfCols)];
 }
-
 
 // ========================================
 // BOARD COMPONENT
@@ -128,6 +130,8 @@ class Board extends React.Component {
     );
   }
 }
+
+const ConnectedBoard = connect(mapStateToProps)(Board);
 
 // ========================================
 // SETTINGS COMPONENT
@@ -233,6 +237,9 @@ class GameHistoryButtons extends React.Component {
   }
 }
 
+const ConnectedGameHistoryButtons = connect(mapStateToProps)(GameHistoryButtons);
+
+
 // ========================================
 // GAME COMPONENT
 // The main component on which all other components are controlled by.
@@ -243,7 +250,7 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.handleJumpTo = this.handleJumpTo.bind(this);
-    this.state = {
+    /*this.state = {
       // Game move history
       history: [{
         squares: Array(9).fill(null), // contains the current pieces on the board in this move
@@ -254,56 +261,59 @@ class Game extends React.Component {
       stepNumber: 0,
       // Is X the next player?
       xIsNext: true,
-    };
+    };*/
   }
   
   // Process a click at the i'th square
   handleClick(i) {
     // Get the current history
-    const history = this.state.history.slice(0, this.state.stepNumber + 1); // all history up to current step number
+    const history = this.props.history.slice(0, this.props.stepNumber + 1); // all history up to current step number
     const current = history[history.length - 1]; // current history
     const squares = current.squares.slice(); // current state of board pieces
 
     // Do not do anything if the game is finished or the clicked square has already been clicked
     if (calculateWinner(squares, this.props.boardCols, this.props.boardRows)
         || squares[i]) {
+      console.log("DO NOT DO ANYTHING");
       return;
     }
-
-    // Update the board pieces at square i
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-
+    
     // Calculate col-row coordinates for the state
     var coordinates = convertIndexToCoordinates(i, this.props.boardCols);
 
+    // Update the board pieces at square i
+    squares[i] = this.props.xIsNext ? 'X' : 'O';
+
     // Update state
-    this.setState({
+    this.props.dispatch(addToHistory(squares, coordinates));
+    /*this.setState({
       history: history.concat([{
         squares: squares,
         clickedSquareCol: coordinates[0] + 1, // get the column from the index
         clickedSquareRow: coordinates[1] + 1, // get the row from the index
       }]),
       stepNumber: history.length,
-      xIsNext: !this.state.xIsNext,
-    });
+      xIsNext: !this.props.xIsNext,
+    });*/
     console.log("==============================");
-    console.log("HISTORY: " + JSON.stringify(this.state.history));
-    console.log("STEPNUMBER: " + this.state.stepNumber);
-    console.log("XISNEXT: " + this.state.xIsNext);
+    console.log("HISTORY: " + JSON.stringify(this.props.history));
+    console.log("STEPNUMBER: " + this.props.stepNumber);
+    console.log("XISNEXT: " + this.props.xIsNext);
   }
 
   // Jump to a previous state
   handleJumpTo(step) {
-    this.setState({
+    this.props.dispatch(jumpToPrevState(step));
+    /*this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
-    });
+    });*/
   }
 
   // Render a Game component
   render() {
-    const history = this.state.history; // all history
-    const current = history[this.state.stepNumber]; // the current state
+    const history = this.props.history; // all history
+    const current = history[this.props.stepNumber]; // the current state
     const winner = calculateWinner(current.squares, this.props.boardCols, this.props.boardRows); // return object containing winning squares and their indexes
 
     // Update status display
@@ -312,7 +322,7 @@ class Game extends React.Component {
       status = 'Winner: ' + winner["squares"][0];
       console.log("WINNER! " + JSON.stringify(winner));
     } else {
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      status = 'Next player: ' + (this.props.xIsNext ? 'X' : 'O');
     }
 
     // Get list of indexes of winning squares
@@ -326,7 +336,7 @@ class Game extends React.Component {
         {/* GAME BOARD */}
         <div className="game">
           <div className="game-board">
-            <Board
+            <ConnectedBoard
               squares={current.squares}
               onClick={(i) => this.handleClick(i)}
               numOfCols={this.props.boardCols}
@@ -338,8 +348,8 @@ class Game extends React.Component {
           <div className="game-info">
             <div>{status}</div>
             <ol>
-              <GameHistoryButtons
-                history={this.state.history}
+              <ConnectedGameHistoryButtons
+                history={this.props.history}
                 handleJumpTo={this.handleJumpTo} />
             </ol>
           </div>
@@ -421,12 +431,12 @@ function calculateWinner(squares, numOfCols, numOfRows) {
 
 // ========================================
 
-const RealGame = connect(mapStateToProps)(Game);
+const ConnectedGame = connect(mapStateToProps)(Game);
 
 // Render a Game component to DOM
 ReactDOM.render(
   <Provider store={store}>
-    <RealGame />
+    <ConnectedGame />
   </Provider>,
   document.getElementById('root')
 );
