@@ -214,8 +214,15 @@ class GameHistoryButtons extends React.Component {
     this.handleJumpTo = this.handleJumpTo.bind(this);
   }
 
-  handleJumpTo(e) {
-    return this.props.handleJumpTo(e.target.value);
+  // Jump to a previous state
+  handleJumpTo(step) {
+    console.log("handleJumpTo() step = " + step);
+    console.log(step);
+    this.props.dispatch(jumpToPrevState(step));
+    /*this.setState({
+      stepNumber: step,
+      xIsNext: (step % 2) === 0,
+    });*/
   }
 
   render() {
@@ -229,7 +236,7 @@ class GameHistoryButtons extends React.Component {
         'Go to game start';
       return (
         <li key={move}>
-          <button value={move} onClick={this.handleJumpTo}>{desc}</button>
+          <button value={move} onClick={this.handleJumpTo(move)}>{desc}</button>
         </li>
       );
     });
@@ -249,7 +256,6 @@ class Game extends React.Component {
   // Define some state attributes
   constructor(props) {
     super(props);
-    this.handleJumpTo = this.handleJumpTo.bind(this);
     /*this.state = {
       // Game move history
       history: [{
@@ -303,18 +309,13 @@ class Game extends React.Component {
     console.log("XISNEXT: " + this.props.xIsNext);
   }
 
-  // Jump to a previous state
-  handleJumpTo(step) {
-    this.props.dispatch(jumpToPrevState(step));
-    /*this.setState({
-      stepNumber: step,
-      xIsNext: (step % 2) === 0,
-    });*/
-  }
-
   // Render a Game component
   render() {
     const history = this.props.history; // all history
+    console.log("RENDER() STEPNUM = " + this.props.stepNumber);
+    console.log(this.props.stepNumber);
+    console.log("RENDER() ISNEXT = " + this.props.xIsNext);
+    console.log(this.props.xIsNext);
     const current = history[this.props.stepNumber]; // the current state
     const winner = calculateWinner(current.squares, this.props.boardCols, this.props.boardRows); // return object containing winning squares and their indexes
 
@@ -351,8 +352,7 @@ class Game extends React.Component {
             <div>{status}</div>
             <ol>
               <ConnectedGameHistoryButtons
-                history={this.props.history}
-                handleJumpTo={this.handleJumpTo} />
+                history={this.props.history} />
             </ol>
           </div>
         </div>

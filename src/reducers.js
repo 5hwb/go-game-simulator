@@ -86,12 +86,13 @@ function changeHistory(state = initialHistoryState, action) {
       // Get the current history
       const history = state.history.slice(0, state.stepNumber + 1); // all history up to current step number
       
-      console.log("------------------------------");
+      console.log("----- ADD_TO_HISTORY -----");
       console.log("rSQUARES: " + action.squares);
       console.log("rCOORDS: " + action.coordinates);
       console.log("rHISTORY: " + JSON.stringify(state.history));
       console.log("rSTEPNUMBER: " + state.stepNumber);
       console.log("rXISNEXT: " + state.xIsNext);
+      console.log("----- ADD_TO_HISTORY -----");
           
       return {
         ...state,
@@ -104,6 +105,12 @@ function changeHistory(state = initialHistoryState, action) {
         xIsNext: !state.xIsNext,
       };
     case JUMP_TO_PREV_STATE:
+      console.log("----- JUMP_TO_PREV_STATE -----");
+      console.log("rSTEPNUMBER: " + state.stepNumber);
+      console.log("rXISNEXT: " + state.xIsNext);
+      console.log("rSTEPNUMBER NEW: " + action.step);
+      console.log("rXISNEXT NEW: " + ((action.step % 2) === 0));
+      console.log("----- JUMP_TO_PREV_STATE -----");
       return {
         ...state,
         stepNumber: action.step,
