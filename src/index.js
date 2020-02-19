@@ -215,10 +215,11 @@ class GameHistoryButtons extends React.Component {
   }
 
   // Jump to a previous state
-  handleJumpTo(step) {
-    console.log("handleJumpTo() step = " + step);
-    console.log(step);
-    this.props.dispatch(jumpToPrevState(step));
+  handleJumpTo(e) {
+    e.preventDefault();
+    console.log("handleJumpTo() step = " + e.target.value);
+    console.log(e.target.value);
+    this.props.dispatch(jumpToPrevState(e.target.value));
     /*this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
@@ -236,7 +237,7 @@ class GameHistoryButtons extends React.Component {
         'Go to game start';
       return (
         <li key={move}>
-          <button value={move} onClick={this.handleJumpTo(move)}>{desc}</button>
+          <button value={move} onClick={this.handleJumpTo}>{desc}</button>
         </li>
       );
     });
