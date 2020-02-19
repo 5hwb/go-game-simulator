@@ -21,11 +21,11 @@ store.dispatch(addSomething('Tic tac toe or baduk? Thats the question'));
 // Maps state values to prop values to be used in the component
 export function mapStateToProps(state) {
   return {
-    aListOfSomething: state.addSomething.aListOfSomething,
-    boardCols: state.changeSettings.boardCols,
-    boardRows: state.changeSettings.boardRows,
-    stepNumber: state.changeHistory.stepNumber,
-    xIsNext: state.changeHistory.xIsNext,
-    history: state.changeHistory.history,
+    aListOfSomething: state.randomState.aListOfSomething,
+    boardCols: state.settingsState.boardCols,
+    boardRows: state.settingsState.boardRows,
+    stepNumber: state.gameState.stepNumber,
+    xIsNext: state.gameState.xIsNext,
+    history: state.gameState.history,
   };
 }

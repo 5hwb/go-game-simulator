@@ -19,7 +19,7 @@ const initialHistoryState = {
   xIsNext: true,
 };
 
-function changeHistory(state = initialHistoryState, action) {
+function gameState(state = initialHistoryState, action) {
   switch (action.type) {
     case RESET_STATE:
       return {
@@ -71,4 +71,4 @@ function changeHistory(state = initialHistoryState, action) {
   }
 }
 
-export default changeHistory;
+export default gameState;

@@ -6,7 +6,7 @@ const initialRandomState = {
   aListOfSomething: [],
 };
 
-function addSomething(state = initialRandomState, action) {
+function randomState(state = initialRandomState, action) {
   switch (action.type) {
     case ADD_SOMETHING:
       // Concat a new entry at the end of the list of texts
@@ -25,4 +25,4 @@ function addSomething(state = initialRandomState, action) {
   }
 }
 
-export default addSomething;
+export default randomState;

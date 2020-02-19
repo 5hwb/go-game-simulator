@@ -9,7 +9,7 @@ const initialSettingsState = {
   boardRows: 3,
 };
 
-function changeSettings(state = initialSettingsState, action) {
+function settingsState(state = initialSettingsState, action) {
   switch (action.type) {
     case CHANGE_BOARD_COLS:
       return {
@@ -26,4 +26,4 @@ function changeSettings(state = initialSettingsState, action) {
   }
 }
 
-export default changeSettings;
+export default settingsState;

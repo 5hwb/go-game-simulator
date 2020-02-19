@@ -33,7 +33,6 @@ class Settings extends React.Component {
   }
 
   // Submit the form and start a new game with the new dimensions
-  // TODO Game is not being reset - find out why!
   handleSubmit(e) {
     e.preventDefault();
     console.log("boardCols = " + this.props.boardCols);

@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
-import changeHistory from './gameState';
-import addSomething from './random';
-import changeSettings from './settings';
+import gameState from './gameState';
+import randomState from './random';
+import settingsState from './settings';
 
 const allReducers = combineReducers({
-  addSomething,
-  changeSettings,
-  changeHistory
+  randomState,
+  settingsState,
+  gameState
 });
 
 export default allReducers;
