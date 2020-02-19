@@ -163,17 +163,11 @@ class Settings extends React.Component {
   }
 
   // Submit the form and start a new game with the new dimensions
+  // TODO Game is not being reset - find out why!
   handleSubmit(e) {
     e.preventDefault();
-    //this.props.dispatch(addSomething('I started a new game with dimensions (' + this.state.newBoardCols + ',' + this.state.newBoardRows + ')!' ));
     console.log("boardCols = " + this.props.boardCols);
     console.log("boardRows = " + this.props.boardRows);
-    /*
-    this.setState({
-      boardCols: this.state.newBoardCols,
-      boardRows: this.state.newBoardRows,
-    });
-    */
     this.props.dispatch(changeBoardCols(this.state.newBoardCols));
     this.props.dispatch(changeBoardRows(this.state.newBoardRows));
     
@@ -215,15 +209,12 @@ class GameHistoryButtons extends React.Component {
   }
 
   // Jump to a previous state
+  // TODO Game is not being reset - find out why!
   handleJumpTo(e) {
     e.preventDefault();
     console.log("handleJumpTo() step = " + e.target.value);
     console.log(e.target.value);
     this.props.dispatch(jumpToPrevState(e.target.value));
-    /*this.setState({
-      stepNumber: step,
-      xIsNext: (step % 2) === 0,
-    });*/
   }
 
   render() {
@@ -253,23 +244,6 @@ const ConnectedGameHistoryButtons = connect(mapStateToProps)(GameHistoryButtons)
 // The main component on which all other components are controlled by.
 // ========================================
 class Game extends React.Component {
-
-  // Define some state attributes
-  constructor(props) {
-    super(props);
-    /*this.state = {
-      // Game move history
-      history: [{
-        squares: Array(9).fill(null), // contains the current pieces on the board in this move
-        clickedSquareCol: -1, // column of the clicked square in this move
-        clickedSquareRow: -1, // row of the clicked square in this move
-      }],
-      // Move number
-      stepNumber: 0,
-      // Is X the next player?
-      xIsNext: true,
-    };*/
-  }
   
   // Process a click at the i'th square
   handleClick(i) {
@@ -295,15 +269,6 @@ class Game extends React.Component {
 
     // Update state
     this.props.dispatch(addToHistory(squares, coordinates));
-    /*this.setState({
-      history: history.concat([{
-        squares: squares,
-        clickedSquareCol: coordinates[0] + 1, // get the column from the index
-        clickedSquareRow: coordinates[1] + 1, // get the row from the index
-      }]),
-      stepNumber: history.length,
-      xIsNext: !this.props.xIsNext,
-    });*/
     console.log("==============================");
     console.log("HISTORY: " + JSON.stringify(this.props.history));
     console.log("STEPNUMBER: " + this.props.stepNumber);
