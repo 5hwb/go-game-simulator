@@ -1,4 +1,5 @@
 import {
+  RESET_STATE,
   ADD_TO_HISTORY,
   JUMP_TO_PREV_STATE,
 } from '../actions';
@@ -20,6 +21,17 @@ const initialHistoryState = {
 
 function changeHistory(state = initialHistoryState, action) {
   switch (action.type) {
+    case RESET_STATE:
+      return {
+        ...state,
+        history: [{
+          squares: Array(9).fill(null),
+          clickedSquareCol: -1,
+          clickedSquareRow: -1,
+        }],
+        stepNumber: 0,
+        xIsNext: true,
+      };
     case ADD_TO_HISTORY:
       // Get the current history
       const history = state.history.slice(0, state.stepNumber + 1); // all history up to current step number
