@@ -9,7 +9,7 @@ export const store = createStore(allReducers);
 
 console.log(store.getState());
 
-const unsubscribe = store.subscribe(() => console.log(store.getState()));
+store.subscribe(() => console.log(store.getState()));
 
 // Dispatch some actions
 store.dispatch(addSomething('This is a message!'));
