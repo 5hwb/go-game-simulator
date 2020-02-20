@@ -19,6 +19,7 @@ class Game extends React.Component {
   
   // Process a click at the i'th square
   handleClick(i) {
+    console.log("==============================");
     // Get the current history
     const history = this.props.history.slice(0, this.props.stepNumber + 1); // all history up to current step number
     const current = history[history.length - 1]; // current history
@@ -41,7 +42,6 @@ class Game extends React.Component {
 
     // Update state
     this.props.dispatch(addToHistory(squares, coordinates));
-    console.log("==============================");
     console.log("HISTORY: " + JSON.stringify(this.props.history));
     console.log("STEPNUMBER: " + this.props.stepNumber);
     console.log("XISNEXT: " + this.props.xIsNext);

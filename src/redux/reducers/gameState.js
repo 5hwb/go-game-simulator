@@ -17,6 +17,7 @@ const initialHistoryState = {
   stepNumber: 0,
   // Is X the next player?
   xIsNext: true,
+  historyButtonWasClicked: false,
 };
 
 function gameState(state = initialHistoryState, action) {
@@ -31,6 +32,7 @@ function gameState(state = initialHistoryState, action) {
         }],
         stepNumber: 0,
         xIsNext: true,
+        historyButtonWasClicked: true,        
       };
     case ADD_TO_HISTORY:
       // Get the current history
@@ -44,6 +46,10 @@ function gameState(state = initialHistoryState, action) {
       console.log("rXISNEXT: " + state.xIsNext);
       console.log("----- ADD_TO_HISTORY -----");
           
+      if (state.historyButtonWasClicked) {
+        console.log("historyButtonWasClicked!!");
+      }
+          
       return {
         ...state,
         history: history.concat([{
@@ -53,6 +59,7 @@ function gameState(state = initialHistoryState, action) {
         }]),
         stepNumber: history.length,
         xIsNext: !state.xIsNext,
+        historyButtonWasClicked: false,
       };
     case JUMP_TO_PREV_STATE:
       console.log("----- JUMP_TO_PREV_STATE -----");
@@ -64,7 +71,8 @@ function gameState(state = initialHistoryState, action) {
       return {
         ...state,
         stepNumber: action.step,
-        xIsNext: (action.step % 2) === 0,
+        xIsNext: (action.step % 2) === 0,  
+        historyButtonWasClicked: true,
       };
     default:
       return state;

@@ -28,7 +28,6 @@ class GameHistoryButtons extends React.Component {
     // * step = an element in the 'history' array game state
     // * move = the i'th move of the game
     const moves = this.props.history.map((step, move) => {
-      console.log("MOVE: " + move);
       const desc = move ?
         'Go to move #' + move + " (" + step.clickedSquareCol + ", " + step.clickedSquareRow + ")" :
         'Go to game start';
