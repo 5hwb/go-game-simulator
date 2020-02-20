@@ -43,7 +43,8 @@ class Game extends React.Component {
     // Update state
     this.props.dispatch(addToHistory(squares, coordinates));
     console.log("HISTORY: " + JSON.stringify(this.props.history));
-    console.log("STEPNUMBER: " + this.props.stepNumber);
+    console.log("HISTORY (sliced): " + JSON.stringify(history));
+    console.log("STEPNUMBER: " + this.props.stepNumber + " (type = " + typeof this.props.stepNumber + ")");
     console.log("XISNEXT: " + this.props.xIsNext);
   }
 
